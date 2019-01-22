@@ -18,12 +18,7 @@ class RoomList extends Component {
 
       this.setState({ rooms: this.state.rooms.concat( room ) });
     });
-
-    this.roomsRef.on('value', snapshot => {
-      this.render();
-    });
   }
-  //TODO add componentWillUnmount - ref.off()?
 
   createRoom(e) {
     e.preventDefault();
@@ -53,12 +48,17 @@ class RoomList extends Component {
           <ul>
           {
             this.state.rooms.map( (room) => {
-            return <li key={room.key}>{room.name}</li>;
+            return(
+              <li key={room.key}
+              onClick={() => this.props.handleRoomClick(room.key)}>{room.name}</li>
+            );
             })
           }
           </ul>
         </section>
-        <form className="create-room"
+        <form
+        className="create-room"
+        autoComplete="off"
         onSubmit={ (e) => this.createRoom(e) }>
           <label>Create New Room
             <input id="newRoom"

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import './App.css';
 import * as firebase from 'firebase';
-import RoomList from './components/RoomList';
+import ChatView from './components/ChatView';
 
 // Initialize Firebase
 var config = {
@@ -15,10 +15,26 @@ var config = {
 firebase.initializeApp(config);
 
 class App extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      activeRoom: ''
+    };
+  }
+
+  handleRoomClick(room) {
+    this.setState({
+      activeRoom: room
+    });
+  }
+
   render() {
     return (
       <div className="App">
-        <RoomList firebase={firebase} />
+        <ChatView
+        firebase={ firebase }
+        handleRoomClick={ (room) => this.handleRoomClick(room) }
+        activeRoom={ this.state.activeRoom } />
       </div>
     );
   }
