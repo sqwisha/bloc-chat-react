@@ -80,7 +80,8 @@ class App extends Component {
         <ChatView
           firebase={ firebase }
           handleRoomClick={ (room) => this.handleRoomClick(room) }
-          activeRoom={ this.state.activeRoom } />
+          activeRoom={ this.state.activeRoom }
+          username={ this.state.username } />
       </div>
     );
   }

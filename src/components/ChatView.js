@@ -14,7 +14,8 @@ class ChatView extends Component {
         <div>
           <MessageList
           firebase={ this.props.firebase }
-          activeRoom={ this.props.activeRoom } />
+          activeRoom={ this.props.activeRoom }
+          username={ this.props.username }/>
         </div>
       </section>
     );

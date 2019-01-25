@@ -26,6 +26,12 @@ class RoomList extends Component {
 
     this.roomsRef.push({
       name: newRoomName
+    })
+    .then( res => {
+      this.props.handleRoomClick(res.getKey())
+    })
+    .catch( err => {
+      console.log(err);
     });
 
     this.setState({
