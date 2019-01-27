@@ -69,6 +69,12 @@ class App extends Component {
     });
   }
 
+  handleRoomDelete() {
+    this.setState({
+      activeRoom: ''
+    });
+  }
+
   render() {
     return (
       <div className="App">
@@ -81,6 +87,7 @@ class App extends Component {
           firebase={ firebase }
           handleRoomClick={ (room) => this.handleRoomClick(room) }
           activeRoom={ this.state.activeRoom }
+          handleRoomDelete={ () => this.handleRoomDelete() }
           username={ this.state.username } />
       </div>
     );

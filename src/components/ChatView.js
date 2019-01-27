@@ -9,7 +9,9 @@ class ChatView extends Component {
         <div>
           <RoomList
           firebase={ this.props.firebase }
-          handleRoomClick={ this.props.handleRoomClick } />
+          activeRoom={ this.props.activeRoom }
+          handleRoomClick={ this.props.handleRoomClick }
+          handleRoomDelete={ this.props.handleRoomDelete } />
         </div>
         <div>
           <MessageList
