@@ -29,6 +29,14 @@ class RoomList extends Component {
     });
   }
 
+  handleChange(e) {
+    const newValue = e.target.value;
+
+    this.setState({
+      newRoomValue: newValue
+    });
+  }
+
   createRoom(e) {
     e.preventDefault();
     const newRoomName = this.state.newRoomValue;
@@ -48,20 +56,20 @@ class RoomList extends Component {
     });
   }
 
+  updateRoom(roomKey) {
+    const newName = {
+      name: prompt('New Name:')
+    };
+
+    this.roomsRef.child(roomKey).update(newName);
+  }
+
   deleteRoom(e, roomKey) {
     e.stopPropagation();
     if (roomKey === this.props.activeRoom) {
       this.props.handleRoomDelete();
     }
     this.roomsRef.child(roomKey).remove();
-  }
-
-  handleChange(e) {
-    const newValue = e.target.value;
-
-    this.setState({
-      newRoomValue: newValue
-    });
   }
 
   render() {
@@ -75,7 +83,10 @@ class RoomList extends Component {
               <li key={ room.key }
               onClick={() => this.props.handleRoomClick(room.key)}>
               { room.name }
-                <button onClick={(e) => this.deleteRoom(e, room.key) }>
+                <button onClick={ () => this.updateRoom (room.key) }>
+                edit
+                </button>
+                <button onClick={ (e) => this.deleteRoom(e, room.key) }>
                 x
                 </button>
               </li>
