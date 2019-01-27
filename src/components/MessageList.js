@@ -12,11 +12,23 @@ class MessageList extends Component {
   }
 
   componentDidMount() {
-    this.messagesRef.on('child_added', snapshot => {
-      const message = snapshot.val();
-      message.key = snapshot.key;
+    this.messagesRef.on('value', snapshot => {
+      const allMessages = snapshot.val();
+      const messages = [];
 
-      this.setState({ messages: this.state.messages.concat( message ) });
+      for (let message in allMessages) {
+        messages.push({
+          key: message,
+          content: allMessages[message].content,
+          sentAt: allMessages[message].sentAt,
+          roomId: allMessages[message].roomId,
+          username: allMessages[message].username
+        });
+      }
+
+      this.setState({
+        messages: messages
+      });
     });
   }
 
@@ -51,6 +63,10 @@ class MessageList extends Component {
     });
   }
 
+  deleteMessage(messageKey) {
+    this.messagesRef.child(messageKey).remove();
+  }
+
   render() {
     return(
       <div id="messages-container">
@@ -58,9 +74,12 @@ class MessageList extends Component {
           <ul>
             {
               this.activeRoomMessages().map( (message) => {
-                return <li key={message.key}>{message.content}
-                <em> - {message.username}</em>
-                </li>;
+                return (
+                <li key={message.key}>
+                {message.username}: {message.content}
+                  <button onClick={ () => this.deleteMessage(message.key) }> x </button>
+                </li>
+                );
               } )
             }
           </ul>

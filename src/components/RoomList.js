@@ -13,7 +13,6 @@ class RoomList extends Component {
 
   componentDidMount() {
     this.roomsRef.on('value', snapshot => {
-      console.log(snapshot);
       const allRooms = snapshot.val();
       const rooms = [];
 
@@ -74,7 +73,12 @@ class RoomList extends Component {
             this.state.rooms.map( (room) => {
             return(
               <li key={ room.key }
-              onClick={() => this.props.handleRoomClick(room.key)}>{ room.name }<span onClick={(e) => this.deleteRoom(e, room.key) }> X </span></li>
+              onClick={() => this.props.handleRoomClick(room.key)}>
+              { room.name }
+                <button onClick={(e) => this.deleteRoom(e, room.key) }>
+                x
+                </button>
+              </li>
             );
             })
           }
