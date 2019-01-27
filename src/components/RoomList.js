@@ -57,6 +57,9 @@ class RoomList extends Component {
   }
 
   updateRoom(roomKey) {
+    const renameInput = prompt('New Name: ');
+    if (renameInput === null) return;
+
     const newName = {
       name: prompt('New Name:')
     };

@@ -5,7 +5,8 @@ class MessageList extends Component {
     super(props);
     this.state = {
       messages: [],
-      messageInput: ''
+      messageInput: '',
+      messageEdit: false
     };
 
     this.messagesRef = this.props.firebase.database().ref('messages');
@@ -63,6 +64,32 @@ class MessageList extends Component {
     });
   }
 
+  editMessage(messageKey) {
+    const currentMessage = this.state.messages.find((message) => {
+      return message.key === messageKey
+    }).content;
+
+    this.setState({
+      messageEdit: true,
+      messageInput: currentMessage
+    });
+  }
+
+  updateMessage(e, messageKey) {
+    e.preventDefault();
+
+    const newMessage = {
+      content: this.state.messageInput
+    };
+
+    this.messagesRef.child(messageKey).update(newMessage);
+
+    this.setState({
+      messageEdit: false,
+      messageInput: ''
+    });
+  }
+
   deleteMessage(messageKey) {
     this.messagesRef.child(messageKey).remove();
   }
@@ -75,26 +102,43 @@ class MessageList extends Component {
             {
               this.activeRoomMessages().map( (message) => {
                 return (
-                <li key={message.key}>
-                {message.username}: {message.content}
-                  <button onClick={ () => this.deleteMessage(message.key) }> x </button>
-                </li>
+                  <li key={message.key}>
+                  {message.username}:
+                  { (this.state.messageEdit)
+                    ?
+                    (<form onSubmit={ (e) => this.updateMessage(e, message.key) }>
+                      <input type="textarea"
+                      value={this.state.messageInput}
+                      onChange={ (e) => this.handleMessageChange(e) } />
+                      <input type="submit" value="Done" />
+                    </form>)
+                    :
+                    (<span>{message.content}
+                      <button onClick={ () => this.editMessage(message.key) }>
+                      edit
+                      </button>
+                      <button onClick={ () => this.deleteMessage(message.key) }>
+                      x
+                      </button>
+                    </span>)
+                  }
+                  </li>
                 );
               } )
             }
           </ul>
         </section>
         {
-          (this.props.activeRoom !== '')
+          (this.props.activeRoom !== '' && !this.state.messageEdit)
           ?
-          <form id="message-input"
+          (<form id="message-input"
           onSubmit={ (e) => this.addMessage(e) }>
           <input type="text"
           value={ this.state.messageInput }
           placeholder="Write your message here"
           onChange={ (e) => this.handleMessageChange(e) } />
           <input type="submit" value="Submit" />
-          </form>
+          </form>)
           :
           null
         }
